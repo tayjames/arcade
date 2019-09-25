@@ -48,4 +48,29 @@ router.post("/", function(req, res, next){
   });
 });
 
+router.put("/:id", function (req, res, next) {
+  Game.update(
+    {
+      title: req.body.title,
+      price: req.body.price,
+      releaseYear: req.body.releaseYear,
+      active: req.body.active
+    },
+    {
+      returing: true,
+      where: {
+        id: parseInt(req.params.id)
+      }
+    }
+  )
+    .then(([rowsUpdate, [updatedGame]]) => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(202).send(JSON.stringify(updatedGame));
+    })
+    .catch(error => {
+      res.setHeader("Content-Type", "application/json");
+      res.status(500).send({ error });
+    });
+});
+
 module.exports = router;
